@@ -1,0 +1,9 @@
+{
+  "name": "Price Checker",
+  "short_name": "Price Checker",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#eef8fb",
+  "theme_color": "#0b3d4f",
+  "description": "Private Price Checker by ZYNORA"
+}
