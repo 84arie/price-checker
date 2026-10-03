@@ -706,6 +706,10 @@ select:disabled{background:#eef3f5;color:#9aa7ae}
 .pcAppLocked{visibility:hidden}
 
 </style>
+
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#0b3d4f">
+
 </head>
 <body>
 
@@ -2519,4 +2523,13 @@ $("savingsNav").onclick=()=>{showPage("savings");syncTop("savings")};
 renderRental();renderOut();renderSvm();initMM();initSavings();
 </script>
 <div id="copyToast" class="copyToast">Quotation copied ✅</div>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+</script>
+
 </body></html>
