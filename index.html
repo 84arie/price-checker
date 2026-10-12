@@ -1936,9 +1936,22 @@ function smmModeRows(n){
   const mode=smm$("simple"+n+"Mode").value;
   let rows = mode==="rental" ? SIMPLE_MM_DATA.filter(smmIsRental) : mode==="out" ? SIMPLE_MM_DATA.filter(smmIsOut) : [];
 
-  // AUDIT FIX 2026-10: Studio AP-1924A is confirmed as 4M / Self-Service
-  // in the Q4 Home Appliance master pricelist. Do not expose conflicting 2M rows.
+  // FINAL DATA REPAIR 2026-10
+  // Studio AP-1924A: Q4 master confirms 4M / Self-Service only.
   rows = rows.filter(r => !(r.code==="AP-1924A" && (r.service||"").toUpperCase()==="2M"));
+
+  // Refrigerator October M&M source was normalized with the two refrigerator
+  // identities crossed. Correct identity mapping is:
+  // CR715-SBS01 = Side-by-Side 715L; CR551-MDR01 = Multi-Door 551L.
+  // Swap the embedded October M&M refrigerator row identities so each price
+  // follows the correct physical model/code while preserving promo/service terms.
+  rows = rows.map(r => {
+    if((r.source||"").includes("M&M_2026 OCTOBER (HA - Rental New & Trade)")){
+      if(r.code==="CR715-SBS01") return {...r,code:"CR551-MDR01",product:"Coway Multi-Door Refrigerator 551L"};
+      if(r.code==="CR551-MDR01") return {...r,code:"CR715-SBS01",product:"Coway Side-by-Side Refrigerator 715L"};
+    }
+    return r;
+  });
 
   // Air Conditioner Jom Tukar / Jom Tambah October source: WOW5 & WOW7 = RM20 x 3 months.
   // SIMPLE_MM_DATA contains an older duplicate WOW7 x 5-month row with the same visible label;
