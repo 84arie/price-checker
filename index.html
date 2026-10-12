@@ -1918,6 +1918,15 @@ function smmPromo(r){
 function smmOutSide(r){
   return ((r.application||"").toLowerCase().includes("trade")||(r.promotion||"").toLowerCase().includes("trade"))?"Trade In":"New Purchase";
 }
+function smmEligibility(r){
+  const promo=(r.promotion||"").toUpperCase();
+  // M&M October eligibility follows the M&M promotion source itself,
+  // not the broader Q4 standard-rental customer eligibility.
+  if(promo.includes("WOW 7") || promo.includes("TRADE X-7")) return "Malaysian Individual only";
+  if(promo.includes("FIESTA") || promo.includes("WOW 5") || promo.includes("EXTRADE") || promo.includes("TRADE X-5"))
+    return "Malaysian / Foreigner Individual";
+  return "Refer current promotion eligibility";
+}
 function smmSet(sel,vals,ph,fn=x=>x){
   sel.innerHTML=`<option value="">${ph}</option>`;
   smmUnique(vals).forEach(v=>sel.add(new Option(fn(v),v)));
@@ -1925,9 +1934,22 @@ function smmSet(sel,vals,ph,fn=x=>x){
 }
 function smmModeRows(n){
   const mode=smm$("simple"+n+"Mode").value;
-  if(mode==="rental") return SIMPLE_MM_DATA.filter(smmIsRental);
-  if(mode==="out") return SIMPLE_MM_DATA.filter(smmIsOut);
-  return [];
+  let rows = mode==="rental" ? SIMPLE_MM_DATA.filter(smmIsRental) : mode==="out" ? SIMPLE_MM_DATA.filter(smmIsOut) : [];
+
+  // AUDIT FIX 2026-10: Studio AP-1924A is confirmed as 4M / Self-Service
+  // in the Q4 Home Appliance master pricelist. Do not expose conflicting 2M rows.
+  rows = rows.filter(r => !(r.code==="AP-1924A" && (r.service||"").toUpperCase()==="2M"));
+
+  // Air Conditioner Jom Tukar / Jom Tambah October source: WOW5 & WOW7 = RM20 x 3 months.
+  // SIMPLE_MM_DATA contains an older duplicate WOW7 x 5-month row with the same visible label;
+  // normalize the active AC M&M WOW5/WOW7 selection to the October Jom Tukar terms.
+  rows = rows.map(r => {
+    if(r.category==="Air Conditioner" && /WOW 5|WOW 7/i.test(r.promotion||"") && smmIsRental(r)){
+      return {...r,promoMonths:3};
+    }
+    return r;
+  });
+  return rows;
 }
 function smmRows(n){
   const cat=smm$("simple"+n+"Cat").value;
@@ -2212,7 +2234,7 @@ function smmRenderProduct(n){
 
   detail.innerHTML=`<div class="mmOptionBlock">
     ${controls}
-    ${chosen?`<div class="mmResultPrice">${mode==="rental"?`${smmMoney(chosen.monthly)}/month`:smmMoney(chosen.outright)}</div>`:""}
+    ${chosen?`<div class="mmResultPrice">${mode==="rental"?`${smmMoney(chosen.monthly)}/month`:smmMoney(chosen.outright)}</div><div style="margin-top:7px;font-size:12px;font-weight:800;color:#52616b">Eligibility: ${smmEligibility(chosen)}</div>`:""}
   </div>`;
 
   return chosen;
@@ -2305,6 +2327,7 @@ function smmRender(){
       if(p.service) lines.push(`Service: ${smmService(p.service)}`);
       lines.push(`Promo: ${smmPromo(p)}`);
       lines.push(`Obligation: ${p.obligation}`);
+      lines.push(`Eligibility: ${smmEligibility(p)}`);
       if(p.promoPrice!==null&&p.promoPrice!==undefined&&p.promoPrice!==""&&Number(p.promoMonths||0)>0){
         lines.push(`Harga promo awal: *${smmMoney(p.promoPrice)}* × ${Number(p.promoMonths)} bulan`);
       }
