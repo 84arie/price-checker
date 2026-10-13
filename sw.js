@@ -1,4 +1,4 @@
-const CACHE_NAME = "price-checker-v2";
+const CACHE_NAME = "price-checker-v3";
 
 const CORE_FILES = [
   "./",
