@@ -2169,13 +2169,20 @@ function smmControls(n){
     html+=smmSelect(`smm${n}App`,"Jenis Pembelian",vals,s.app,`smmSetField(${n},'app',this.value)`,smmPurchase);
     if(!s.app)return html;
 
-    // PROMO: filter by all choices above, but NOT by current promo.
+    // PROMO: keep every valid promo for the selected product/purchase visible.
+    // Laundry Care fix: do not let service-row parsing collapse the promo dropdown to FIESTA only.
     rows=smmRows(n).filter(r=>
       smmCare(r)===s.care &&
-      (r.service||"__NO_SERVICE__")===s.service &&
-      r.application===s.app
+      r.application===s.app &&
+      (r.category==="Laundry Care" || (r.service||"__NO_SERVICE__")===s.service)
     );
     vals=smmUnique(rows.map(smmPromo));
+    if(smm$("simple"+n+"Cat").value==="Laundry Care"){
+      const wanted=s.app==="Rental - Trade In"
+        ? ["EXTRADE","TRADE X-5","TRADE X-7"]
+        : ["FIESTA","WOW 5","WOW 7"];
+      vals=wanted.filter(p=>rows.some(r=>smmPromo(r)===p));
+    }
     if(vals.length===1 && !s.promo) s.promo=vals[0];
     html+=smmSelect(`smm${n}Promo`,"Promo",vals,s.promo,`smmSetField(${n},'promo',this.value)`);
     if(!s.promo)return html;
