@@ -1299,6 +1299,15 @@ function matchingOfferRows(base){
   );
 }
 
+function rentalEligibilityText(row){
+  const raw=(row?.customer||"").trim();
+  if(!raw) return "Refer current plan eligibility";
+  const u=raw.toUpperCase(), parts=[];
+  if(u.includes("MALAYSIAN")) parts.push("🇲🇾 Malaysian");
+  if(u.includes("FOREIGNER")) parts.push("🌍 Foreigner");
+  if(u.includes("CORPORATE")) parts.push("🏢 Corporate");
+  return parts.length?parts.join(" · "):raw;
+}
 function dealCard(base){
   const related=matchingOfferRows(base);
   const normal = related.find(x=>!x.offer || x.offer==="Original 20TH 3.0") || base;
@@ -1312,6 +1321,7 @@ function dealCard(base){
   const promoBefore=original20?.promoPrice ?? mm?.promoPrice ?? null;
   const promoAfter=promoBefore!==null?addSST(promoBefore,base):null;
   const promoMonths=original20?.promoMonths ?? mm?.promoMonths ?? null;
+  const eligibility=rentalEligibilityText(normal);
 
   const tile=(label,val,pv,cls="",benefit="")=>val===null||val===undefined?"":`
     <div class="priceBox ${cls}">
@@ -1340,6 +1350,7 @@ function dealCard(base){
       <span class="tag">${promoLabel(base)}</span>
       ${base.obligation?`<span class="tag">${base.obligation}</span>`:""}
     </div>
+    <div class="dealMeta" style="margin:8px 0 10px"><strong>Eligibility:</strong> ${eligibility}</div>
     <div class="priceGrid">
       ${pairedTiles("Harga Normal",normalBefore,normalAfter,normal.pv)}
       ${pairedTiles("Harga M&M",mmBefore,mmAfter,mm?.pv||null)}
@@ -1357,6 +1368,7 @@ function dealCard(base){
       ...(careLabel(base)!=="Self-Service" && serviceLabel(base.service)?[`*Service Frequency:* ${({"2M":"2 months","4M":"4 months","6M":"6 months","SS":"Self-Service"})[base.service]||serviceLabel(base.service)}`]:[]),
       `*Promotion:* ${promoLabel(base)}`,
       ...(base.obligation?[`*Contract:* ${base.obligation}`]:[]),
+      `*Eligibility:* ${(normal.customer||"Refer current plan eligibility")}`,
       "",
       "*MONTHLY PAYMENT*",
       ...(normalBefore!==null&&normalBefore!==undefined?[`*Normal Price:* *${money(normalBefore)}/month*`]:[]),
