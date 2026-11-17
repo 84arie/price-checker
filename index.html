@@ -1283,8 +1283,45 @@ function hideSteps(names){ names.forEach(n=>stepMap[n].classList.add("stepHidden
 function showStep(name){ stepMap[name].classList.remove("stepHidden"); }
 
 
-function rentalRows(){ return DATA.filter(x=>x.monthly!==null && x.monthly!==undefined); }
-function pkey(r){ return [r.product,r.code].join("|||"); }
+function rentalRows(){
+  return DATA.filter(x=>x.monthly!==null && x.monthly!==undefined).map(r=>
+    r.category==="Outdoor Filter" && r.code==="POE-23A" && !r.service && /^TOP UP/i.test(r.promotion||"")
+      ? {...r,service:"6M"} : r
+  );
+}
+function pkey(r){ return pcModelKey(r); }
+// Display-only air-conditioner model labels. Official model/HP mapping, Nov 2026.
+// The original product codes, filters, pricing records, promotions and layout stay untouched.
+const PC_AC_HP={
+  "CAC09-ST01F":"1.0 HP",
+  "CAC12-ST01F":"1.5 HP",
+  "CAC12-ST02":"1.5 HP",
+  "CAC18-ST02":"2.0 HP"
+};
+function pcCanonicalAcProduct(product){
+  return String(product||"").replace(/\s*\/\s*Air Conditioner\s*$/i," Air Conditioner");
+}
+function pcModelKey(row,separator="|||"){
+  const product=row?.category==="Air Conditioner"
+    ? pcCanonicalAcProduct(row.product)
+    : (row?.product||"");
+  return [product,row?.code||""].join(separator);
+}
+function pcAcModelLabel(product,code){
+  const hp=PC_AC_HP[String(code||"").trim().toUpperCase()];
+  if(!hp)return product||"";
+  const series=pcCanonicalAcProduct(product).replace(/\s*Air Conditioner\s*$/i,"").trim();
+  return `${series} ${hp} (${code})`;
+}
+function pcDisplayModel(row){
+  return row&&row.category==="Air Conditioner"
+    ? pcAcModelLabel(row.product,row.code)
+    : (row?.product||"");
+}
+function pcModelOptionLabel(value,separator="|||"){
+  const [product,code]=String(value||"").split(separator);
+  return pcAcModelLabel(product,code);
+}
 function isMattressCat(v){ return v==="BEREX Mattress"; }
 
 
@@ -1397,7 +1434,7 @@ cat.onchange=()=>{
   if(!cat.value){ renderRental(); return; }
   const rows=rentalFiltered();
   const keys=uniq(rows.map(pkey));
-  setSelect(prod,keys,"Pilih model",v=>v.split("|||")[0]);
+  setSelect(prod,keys,"Pilih model",v=>pcModelOptionLabel(v));
   showStep("product");
   renderRental();
 };
@@ -1625,7 +1662,7 @@ function pcCustomerRentalQuote(base,cmp,normalBefore,normalAfter,mmBefore,mmAfte
   };
   const list=[
     '✨ *SEBUT HARGA COWAY* ✨','',
-    `${icons[base.category]||'🏡'} *${base.product}*`,
+    `${icons[base.category]||'🏡'} *${pcDisplayModel(base)}*`,
     ...(isMattressCat(base.category)?[
       `Jenis: ${mattressTypeLabel(base)}`,
       `Saiz: ${mattressSizeLabel(base)}`
@@ -1702,7 +1739,7 @@ function dealCard(base){
     `${money(after)}/bulan${after!==null&&Math.abs(Number(after)-Number(before))>.001?' (termasuk SST 6%)':''}`;
 
   return `<article class="dealCard">
-    <div class="dealTitle">${safe(base.product)}</div>
+    <div class="dealTitle">${safe(pcDisplayModel(base))}</div>
     <div class="tagrow">
       ${isMattressCat(base.category)?`<span class="tag">${safe(mattressTypeLabel(base))}</span><span class="tag">${safe(mattressSizeLabel(base))}</span>`:''}
       <span class="tag">${safe(careLabel(base))}</span>
@@ -1771,7 +1808,7 @@ function renderRental(){
           <div><div class="dealAmt">${money(r.monthly)}</div>${r.pv?`<div class="dealPv">${Number(r.pv).toLocaleString("en-MY")} PV</div>`:""}</div>
         </div>`;
       }).join("");
-      cards.push(`<article class="browseCard"><div class="browseTitle">${first.product}</div><div class="browseCat">${first.category}</div>${lines}</article>`);
+      cards.push(`<article class="browseCard"><div class="browseTitle">${pcDisplayModel(first)}</div><div class="browseCat">${first.category}</div>${lines}</article>`);
     }
     box.innerHTML=cards.length?cards.join(""):'<div class="empty">Tiada harga yang sepadan dengan pilihan ini.</div>';
     return;
@@ -1804,7 +1841,7 @@ const outStepProduct=$("outStepProduct"), outStepMattressType=$("outStepMattress
 
 
 function outAllRows(){ return OUTDATA; }
-function outKey(r){ return [r.product,r.code].join("|||"); }
+function outKey(r){ return pcModelKey(r); }
 function outMattressTypeLabel(r){ return mattressTypeLabel(r); }
 function outMattressSizeLabel(r){ return mattressSizeLabel(r); }
 
@@ -1855,7 +1892,7 @@ outCat.onchange=()=>{
   outProd.value=outMattressType.value=outMattressSize.value=outService.value=outApplication.value="";
   if(!outCat.value){renderOut();return;}
   const keys=uniq(outFiltered().map(outKey));
-  outSetSelect(outProd,keys,"Pilih model",v=>v.split("|||")[0]);
+  outSetSelect(outProd,keys,"Pilih model",v=>pcModelOptionLabel(v));
   outShow(outStepProduct);renderOut();
 };
 outProd.onchange=()=>{
@@ -1907,7 +1944,7 @@ function outPriceBox(row){
 
 function pcCustomerOutrightQuote(base,mtype,msize,svc,side,original,mm){
   const fmt=n=>'RM'+Number(n).toLocaleString('en-MY',{minimumFractionDigits:Number(n)%1?2:0,maximumFractionDigits:2});
-  const list=['✨ *SEBUT HARGA COWAY* ✨','',`🏡 *${base.product}*`,
+  const list=['✨ *SEBUT HARGA COWAY* ✨','',`🏡 *${pcDisplayModel(base)}*`,
     ...(isMattressCat(base.category)?[`Jenis: ${mtype}`,`Saiz: ${msize}`]:[]),
     ...(svc!=='Outright'?[`🔧 Servis: ${serviceLabel(svc)}`]:[]),
     `📌 Pembelian terus (${side==='Trade In'?'Trade In':'New Purchase'})`,
@@ -1949,7 +1986,7 @@ function renderOut(){
     const boxes=outPriceBox(original)+outPriceBox(mm);
     if(!boxes)continue;
     cards.push(`<article class="outCard2">
-      <div class="outTitle2">${first.product}</div>
+      <div class="outTitle2">${pcDisplayModel(first)}</div>
       <div class="outSub2">${first.category}</div>
       <div class="tagrow">
         ${isMattressCat(first.category)?`<span class="tag">${mtype}</span><span class="tag">${msize}</span>`:""}
@@ -2281,7 +2318,7 @@ const SIMPLE_MM_CATALOG={"Air Conditioner":[["F Series 1.0HP|||CAC09-ST01F","F S
 function smm$(id){return document.getElementById(id);}
 function smmMoney(v){return "RM"+Number(v).toLocaleString("en-MY",{minimumFractionDigits:Number(v)%1?2:0,maximumFractionDigits:2});}
 function smmUnique(a){return [...new Set(a.filter(v=>v!==undefined&&v!==null&&String(v)!==""))];}
-function smmModelKey(r){return [r.product,r.code].join("|||");}
+function smmModelKey(r){return pcModelKey(r); }
 function smmMattType(r){
   const v=(r.variant||"").toLowerCase();
   if(v.includes("mattress only"))return "Mattress Only";
@@ -2318,10 +2355,18 @@ function smmPurchase(v){
 }
 function smmPromo(r){
   const raw=(r.promotion||"").trim(),p=raw.toUpperCase();
+  const offer=String(r.offer||"").toUpperCase();
+  // These Jom Tukar prices share the WOW/FIESTA code, but have DIFFERENT rebate durations.
+  // Keep them separate: do not silently merge with ordinary WOW/FIESTA options.
+  if(offer.includes("JOM TUKAR / JOM TAMBAH AC"))return "JOM TUKAR / JOM TAMBAH AC — "+raw;
+  if(offer.includes("JOM TUKAR WP"))return "JOM TUKAR WP — "+raw;
   if(p==="FIESTA"||p==="FIESTA (3+2)")return "FIESTA";
   if(p==="EXTRADE"||p==="EXTRADE (3+2)")return "EXTRADE";
   if(p==="JOM TUKAR"||p==="JOM TUKAR (3+2)")return "JOM TUKAR";
   return raw;
+}
+function smmObligationLabel(v){
+  return ({"3+2":"3+2 (5 tahun)","5+0":"5+0 (5 tahun)","7+0":"7+0 (7 tahun)","9+0":"9+0 (9 tahun)"})[v]||v;
 }
 function smmOutSide(r){
   return ((r.application||"").toLowerCase().includes("trade")||(r.promotion||"").toLowerCase().includes("trade"))?"Trade In":"New Purchase";
@@ -2455,7 +2500,7 @@ function smmCategoryChanged(n){
 
 
   const models=smmUnique(smmRows(n).map(smmModelKey));
-  models.forEach(v=>model.add(new Option(v.split("|||")[0],v)));
+  models.forEach(v=>model.add(new Option(pcModelOptionLabel(v),v)));
   smm$("simple"+n+"ModelWrap").style.display="block";
   smmResetState(n);
   smmRender();
@@ -2618,7 +2663,7 @@ function smmControls(n){
     );
     vals=smmUnique(rows.map(r=>r.obligation));
     if(vals.length===1 && !s.ob) s.ob=vals[0];
-    html+=smmSelect(`smm${n}Ob`,"Obligation",vals,s.ob,`smmSetField(${n},'ob',this.value)`);
+    html+=smmSelect(`smm${n}Ob`,"Obligation",vals,s.ob,`smmSetField(${n},'ob',this.value)`,smmObligationLabel);
     return html;
   }
 
@@ -2723,7 +2768,7 @@ function smmScheduleData(p1,p2){
 }
 function smmScheduleHTML(p1,p2){
   const rows=smmScheduleData(p1,p2);
-  const name1=p1.product||"Product 1", name2=p2.product||"Product 2";
+  const name1=pcDisplayModel(p1)||"Product 1", name2=pcDisplayModel(p2)||"Product 2";
   return `<div class="mmPaySchedule">
     <div class="mmPayTitle">Jadual Bayaran Bulanan</div>
     <div class="mmPayNote">Dipaparkan sehingga bulan pertama kedua-dua produk sudah masuk harga bulanan biasa.</div>
@@ -2765,15 +2810,15 @@ function pcCustomerMmSchedule(p1,p2){
   const end=Math.max(Number(p1.promoMonths||0),Number(p2.promoMonths||0));
   const lines=[
     '📅 *JADUAL BAYARAN MIX & MATCH*','',
-    `1️⃣ ${p1.product}`,
-    `2️⃣ ${p2.product}`,'',
+    `1️⃣ ${pcDisplayModel(p1)}`,
+    `2️⃣ ${pcDisplayModel(p2)}`,'',
   ];
   for(const v of stages){
     const label=v.normal && end>0?`Bermula bulan ke-${v.first}`:
       v.last>v.first?`Bulan ${v.first}–${v.last}`:
       end===0?'Kadar bulanan':'Bulan '+v.first;
-    lines.push(`📌 *${label}*`, `• ${p1.product}: ${smmMoney(v.p1)}`,
-      `• ${p2.product}: ${smmMoney(v.p2)}`,`💙 *Jumlah: ${smmMoney(v.total)}/bulan*`,'');
+    lines.push(`📌 *${label}*`, `• ${pcDisplayModel(p1)}: ${smmMoney(v.p1)}`,
+      `• ${pcDisplayModel(p2)}: ${smmMoney(v.p2)}`,`💙 *Jumlah: ${smmMoney(v.total)}/bulan*`,'');
   }
   lines.push('_Jadual ini berpandukan kadar promo dan tempoh rebat yang dipilih. Tertakluk kepada kelayakan, SST jika berkenaan dan pengesahan Coway._');
   return lines.filter((x,i,a)=>!(x===''&&a[i-1]==='')).join('\n').trim();
@@ -2782,10 +2827,10 @@ function pcCustomerMmQuote(p1,p2,mode1,mode2){
   const list=['🎉 *KOMBO COWAY MIX & MATCH* 🎉','',
     'Dua pilihan Coway dalam satu tempahan 💙',''];
   for(const [no,p,mode] of [[1,p1,mode1],[2,p2,mode2]]){
-    list.push(`${no===1?'1️⃣':'2️⃣'} *${p.product}*`);
+    list.push(`${no===1?'1️⃣':'2️⃣'} *${pcDisplayModel(p)}*`);
     if(p.category==='BEREX Mattress')list.push(`🛏️ ${smmMattType(p)} · ${smmMattSize(p)}`);
     if(mode==='rental'){
-      list.push(`📌 ${smmPromo(p)} · ${p.obligation} · Sewa`);
+      list.push(`📌 ${smmPromo(p)} · ${smmObligationLabel(p.obligation)} · Sewa`);
       if(p.service)list.push(`🔧 ${smmService(p.service)} · ${smmCare(p)}`);
       const m=Number(p.promoMonths||0),hasPromo=p.promoPrice!==null&&p.promoPrice!==undefined&&p.promoPrice!==''&&m>0;
       if(hasPromo)list.push(`🌟 ${smmMoney(p.promoPrice)}/bulan untuk ${m} bulan pertama`);
@@ -2811,8 +2856,8 @@ function pcCustomerMmQuote(p1,p2,mode1,mode2){
   }else{
     const rental=mode1==='rental'?p1:p2,outright=mode1==='out'?p1:p2;
     list.push('✨ *RINGKASAN BAYARAN*',
-      `💙 Sewa bulanan ${rental.product}: ${smmMoney(rental.monthly)}${Number(rental.promoMonths||0)>0?' (selepas tempoh rebat)':''}`,
-      `💰 Pembelian terus ${outright.product}: *${smmMoney(outright.outright)}*`);
+      `💙 Sewa bulanan ${pcDisplayModel(rental)}: ${smmMoney(rental.monthly)}${Number(rental.promoMonths||0)>0?' (selepas tempoh rebat)':''}`,
+      `💰 Pembelian terus ${pcDisplayModel(outright)}: *${smmMoney(outright.outright)}*`);
   }
   list.push('','✅ *Untuk menikmati Mix & Match*, pembelian sekurang-kurangnya 2 unit perlu memenuhi syarat dalam bulan yang sama.',
     '📲 *Nak saya semak kelayakan dan bantu uruskan kedua-dua produk ini?* 😊',
@@ -2889,13 +2934,18 @@ function svFreq(v){return ({"2M":"2 bulan sekali","4M":"4 bulan sekali","6M":"6 
 function svSourcePriority(r){const o=(r.offer||"").toLowerCase();const source=(r.source||"").toLowerCase();return (o===""?0:o.includes("original")?1:10)+(source.includes("pricelist")?0:1);}
 // Only normal/original-price rows, never M&M promotional rows or additional discounts.
 function svRows(){return ALLDATA.filter(r=>r.monthly!==null&&r.monthly!==undefined&&r.application&&r.application.startsWith("Rental")&&["FIESTA","WOW 5","WOW 7","TRADE X-5","TRADE X-7"].includes(svPromo(r))&&!/mix\s*&\s*match/i.test(r.offer||"")&&!/additional/i.test(r.offer||""));}
-function svComparable(r){return [r.category,r.product,r.code,r.variant||"",svCare(r),r.service||""].join("§");}
+function svComparable(r){
+  // The official AC sources spell the same P/F series and variant differently.
+  // Match by exact model code plus care and service frequency; never mix HP capacities.
+  if(r.category==="Air Conditioner")return [r.category,r.code,svCare(r),r.service||""].join("§");
+  return [r.category,r.product,r.code,r.variant||"",svCare(r),r.service||""].join("§");
+}
 const svComparableSet=new Set();
 function svFill(id,items,placeholder,fn=x=>x){const el=svEl(id);el.innerHTML="";el.add(new Option(placeholder,""));svUnique(items).forEach(x=>el.add(new Option(fn(x),x)));el.value="";}
 function svToggle(id,show){svEl(id).style.display=show?"block":"none";}
 function svReset(ids){for(const [wrap,sel] of ids){svToggle(wrap,false);svFill(sel,[],"Pilih pilihan");}svEl("saveResult").innerHTML="";}
 function svRawFiltered(){const cat=svEl("saveCat").value,model=svEl("saveModel").value,type=svEl("saveType").value,size=svEl("saveSize").value,care=svEl("saveCare").value,freq=svEl("saveFreq").value;
- return svRows().filter(r=>(!cat||r.category===cat)&&(!model||[r.product,r.code].join("§")===model)&&(!type||svType(r)===type)&&(!size||svSize(r)===size)&&(!care||svCare(r)===care)&&(!freq||(r.service||"__NONE__")===freq));}
+ return svRows().filter(r=>(!cat||r.category===cat)&&(!model||pcModelKey(r,"§")===model)&&(!type||svType(r)===type)&&(!size||svSize(r)===size)&&(!care||svCare(r)===care)&&(!freq||(r.service||"__NONE__")===freq));}
 function svAvailableYears(rows){
  const by=new Map();
  for(const r of rows){const k=svComparable(r);if(!by.has(k))by.set(k,new Set());by.get(k).add(svPromo(r));}
@@ -2925,8 +2975,8 @@ function svCategoryChanged(){svReset([["saveModelWrap","saveModel"],["saveTypeWr
  svEl("saveCoverage").textContent=possibilities.size
    ? "Perbandingan tersedia (bergantung pada model & servis): "+[...possibilities].join(" · ")
    : "Tiada pasangan harga sepadan untuk kategori ini.";
- const models=svUnique(rows.map(r=>[r.product,r.code].join("§"))).filter(v=>svHasPair(rows.filter(r=>[r.product,r.code].join("§")===v)));
- svFill("saveModel",models,"Pilih model",v=>v.split("§")[0]);svToggle("saveModelWrap",models.length>0);}
+ const models=svUnique(rows.map(r=>pcModelKey(r,"§"))).filter(v=>svHasPair(rows.filter(r=>pcModelKey(r,"§")===v)));
+ svFill("saveModel",models,"Pilih model",v=>pcModelOptionLabel(v,"§"));svToggle("saveModelWrap",models.length>0);}
 function svModelChanged(){svReset([["saveTypeWrap","saveType"],["saveSizeWrap","saveSize"],["saveCareWrap","saveCare"],["saveFreqWrap","saveFreq"],["saveTermWrap","saveTerm"],["saveCompareWrap","saveCompare"]]);if(!svEl("saveModel").value)return;
  if(svEl("saveCat").value==="BEREX Mattress"){const v=svUnique(svRawFiltered().map(svType));svFill("saveType",v,"Pilih jenis");svToggle("saveTypeWrap",v.length>0);return;}svContinueCare();}
 function svTypeChanged(){svReset([["saveSizeWrap","saveSize"],["saveCareWrap","saveCare"],["saveFreqWrap","saveFreq"],["saveTermWrap","saveTerm"],["saveCompareWrap","saveCompare"]]);if(!svEl("saveType").value)return;
@@ -2976,7 +3026,7 @@ function svChooseQuoteAngle(angle){
 }
 function svHtmlEscape(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function svBuildQuote(angle,base,trade,baseline,years,difference,months,total){
- const model=base.product,
+ const model=pcDisplayModel(base),
    mattress=base.category==='BEREX Mattress'?`🛏️ ${svType(base)} · ${svSize(base)}`:null,
    service=base.service?`🔧 Servis: ${svFreq(base.service)}`:null,
    plan=`🗓️ Pelan Trade In: TRADE X-${years} (${years} tahun)`,
