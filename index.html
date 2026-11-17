@@ -1372,7 +1372,9 @@ function promoLabel(rowOrValue){
   // Make them discoverable as separate choices, without merging them with normal promos.
   if(p==="JOM TUKAR CORPORATE" || offer.includes("CORPORATE JOM TUKAR WP")) return "JOM TUKAR WP — CORPORATE";
   if(offer.includes("JOM TUKAR WP")) return "JOM TUKAR WP — INDIVIDUAL";
-  if(offer.includes("JOM TUKAR / JOM TAMBAH AC")) return "JOM TUKAR / JOM TAMBAH AC";
+  if(offer.includes("JOM TUKAR / JOM TAMBAH AC"))
+    return p==="WOW 7" ? "JOM TUKAR / TAMBAH AC — WOW 7 (7 TAHUN)" : "JOM TUKAR / JOM TAMBAH AC";
+  if(row && row.category==="Air Conditioner" && p==="WOW 7") return "WOW 7 (7 TAHUN)";
   if(p==="FIESTA" || p==="FIESTA (3+2)") return "FIESTA";
   if(p==="EXTRADE" || p==="EXTRADE (3+2)") return "EXTRADE";
   if(p==="JOM TUKAR" || p==="JOM TUKAR (3+2)") return "JOM TUKAR";
@@ -1520,7 +1522,8 @@ promotion.onchange=()=>{
 
 function continueObligation(){
   const vals=rentalFiltered().map(x=>x.obligation);
-  resolveStep("obligation",obligation,vals,"Pilih obligation",x=>x,renderRental);
+  resolveStep("obligation",obligation,vals,"Pilih obligation",x=>
+    cat.value==="Air Conditioner" && x==="7+0" ? "7+0 (7 tahun)" : x,renderRental);
 }
 obligation.onchange=renderRental;
 
@@ -2358,8 +2361,10 @@ function smmPromo(r){
   const offer=String(r.offer||"").toUpperCase();
   // These Jom Tukar prices share the WOW/FIESTA code, but have DIFFERENT rebate durations.
   // Keep them separate: do not silently merge with ordinary WOW/FIESTA options.
-  if(offer.includes("JOM TUKAR / JOM TAMBAH AC"))return "JOM TUKAR / JOM TAMBAH AC — "+raw;
+  if(offer.includes("JOM TUKAR / JOM TAMBAH AC"))
+    return "JOM TUKAR / JOM TAMBAH AC — "+(p==="WOW 7"?"WOW 7 (7 TAHUN)":raw);
   if(offer.includes("JOM TUKAR WP"))return "JOM TUKAR WP — "+raw;
+  if(r.category==="Air Conditioner" && p==="WOW 7")return "WOW 7 (7 TAHUN)";
   if(p==="FIESTA"||p==="FIESTA (3+2)")return "FIESTA";
   if(p==="EXTRADE"||p==="EXTRADE (3+2)")return "EXTRADE";
   if(p==="JOM TUKAR"||p==="JOM TUKAR (3+2)")return "JOM TUKAR";
