@@ -812,6 +812,58 @@ select:disabled{background:#eef3f5;color:#9aa7ae}
 .savingQuoteSelect .copyQuoteBtn{margin-top:11px;font-size:13px;min-height:43px}
 .savingQuoteDisclaimer{color:#6e848c;font-size:10px;line-height:1.5;margin-top:10px}
 @media(max-width:360px){.savingQuoteTab{padding:8px 3px;font-size:10px}}
+
+/* Rental — copy either a concise or a detailed customer quote per selected plan. */
+.rentalQuoteActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.rentalQuoteActions .copyQuoteBtn{width:100%;min-width:0;min-height:46px;font-size:12px;line-height:1.35;margin:0;padding:9px 7px;white-space:normal}
+.rentalQuoteActions .rentalCopyShort{background:#eaf8fd;color:#07688a;border:1px solid #8bd0e4}
+.rentalQuoteActions .rentalCopyFull{background:#0e7097;color:#fff;border:1px solid #0e7097}
+.rentalQuoteActions .copyQuoteBtn.copied{background:#e3f7e9;color:#1b7448;border-color:#9bd9b5}
+@media(max-width:360px){.rentalQuoteActions{gap:6px}.rentalQuoteActions .copyQuoteBtn{font-size:11px;padding:8px 4px}}
+
+/* Multi-plan quotation: new isolated feature. Existing five-tab layout unchanged. */
+#mqOpen{display:block;width:100%;margin:7px 0 15px;border:1px solid #b9dce2;background:#e9f7fc;color:#09658a;border-radius:15px;padding:14px 12px;font-family:inherit;font-size:13px;font-weight:900;cursor:pointer}
+#mqOpen strong{font-size:14px}
+.mqHero{background:#fff;border:1px solid #cfe5e9;border-radius:20px;padding:16px;margin-bottom:14px}
+.mqHeading{display:flex;gap:9px;align-items:center;justify-content:space-between;margin-bottom:13px}
+.mqHeading .h1{margin:0}
+.mqBack{font-size:12px;font-weight:900;border:1px solid #cce2e9;background:#f1f8fb;color:#17627e;border-radius:10px;padding:10px 11px;cursor:pointer;white-space:nowrap}
+.mqFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.mqField{min-width:0}.mqField label{font-size:11px;margin:0 0 6px;color:#536f7b}
+.mqField select{width:100%;height:48px;font-size:13px;min-width:0;text-overflow:ellipsis;padding:0 28px 0 10px;border-radius:11px}
+.mqIntro{color:#617d89;font-size:12px;line-height:1.5;margin:4px 0 14px}
+.mqSelectionHeader{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:0 0 10px}
+.mqSelectionHeader b{font-size:15px;color:#183b49}
+.mqTools{display:flex;gap:6px}.mqTools button{border:1px solid #cce0e6;background:#fff;border-radius:10px;color:#17627e;padding:8px;font-weight:850;font-size:11px;cursor:pointer}
+.mqPlanCard{display:block;border:1px solid #d5e5ea;background:#fff;border-radius:15px;padding:11px 12px;margin:8px 0;cursor:pointer}
+.mqPlanCard:has(input:checked){border-color:#13a7c4;background:#f0fbfe;box-shadow:0 0 0 1px #13a7c455}
+.mqCardTop{display:flex;gap:9px;align-items:flex-start}
+.mqCardTop input{width:19px;height:19px;flex:none;margin:1px 0 0;accent-color:#0686b5}
+.mqPlanTitle{font-size:13px;font-weight:950;color:#1c4655;line-height:1.35}
+.mqPlanDesc{font-size:11px;color:#607883;line-height:1.5;margin-top:3px}
+.mqRates{display:flex;gap:9px;flex-wrap:wrap;margin:9px 0 0 28px;color:#335a68;font-size:11px}
+.mqRates span{background:#eff7fa;border-radius:8px;padding:5px 7px}.mqRates b{color:#066c95}
+.mqResult{border:1px solid #b9dfd5;border-radius:18px;background:#fff;padding:14px;margin:15px 0 10px}
+.mqResultTitle{font-size:16px;font-weight:950;color:#116c5d}
+.mqQuotePreview{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4fafb;border:1px solid #e0ecf0;border-radius:12px;padding:12px;margin-top:11px;font:12px/1.6 system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#1b3e4d;max-height:370px;overflow-y:auto}
+.mqResult .copyQuoteBtn{font-size:13px;min-height:44px}
+
+/* Multi Quote only: the customer can choose a concise or detailed WhatsApp message. */
+.mqQuoteModeLabel{font-size:12px;font-weight:850;color:#355e6c;margin-top:14px;margin-bottom:8px}
+.mqQuoteMode{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mqQuoteMode button{background:#f3f8fa;color:#355e6c;border:1px solid #d2e3e8;border-radius:12px;min-height:44px;font-size:12px;font-family:inherit;font-weight:900;cursor:pointer}
+.mqQuoteMode button.active{background:#e6f7fc;color:#086e93;border-color:#1594b7;box-shadow:inset 0 0 0 1px #1594b7}
+.mqQuoteMode button:focus-visible{outline:3px solid #83cadd;outline-offset:2px}
+@media(max-width:400px){.mqFields{gap:8px}.mqField select{font-size:12px}.mqHeading .h1{font-size:17px}.mqRates{margin-left:0}}
+
+
+/* Multi Quote discoverability: 6th menu, with existing five menu actions unchanged */
+.bottom .nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
+.bottom .navbtn{min-width:0;padding:2px 1px;font-size:10px;line-height:1.15}
+#multiQuoteNav{background:#e5f6ff;color:#05668a;border:1px solid #b5dbe9}
+#multiQuoteNav.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+#pricePage > #mqOpen{margin:0 0 11px;background:#e4f6fd;border:1.5px solid #85cae2;color:#056d94;box-shadow:0 3px 10px rgba(4,114,160,.10)}
+@media(max-width:420px){.bottom .nav{gap:3px}.bottom .navbtn{font-size:8.8px;letter-spacing:-.1px;padding:2px 0}}
 </style>
 
 
@@ -853,6 +905,7 @@ select:disabled{background:#eef3f5;color:#9aa7ae}
 
 <main class="wrap">
 <section id="pricePage">
+  <button id="mqOpen" type="button" onclick="mqOpenPage()">📋 <strong>QUOTATION PELBAGAI PELAN</strong> · Banding beberapa promo & obligation sekaligus</button>
   <div class="hero">
     <div class="step" id="stepCategory" style="margin-top:0">
       <label><span>1. Kategori Produk</span></label>
@@ -1108,6 +1161,24 @@ select:disabled{background:#eef3f5;color:#9aa7ae}
 
 
 
+<section id="multiQuotePage" class="hidden">
+  <div class="mqHero">
+    <div class="mqHeading"><div class="h1">📋 Quotation Pelbagai Pelan</div><button type="button" id="mqBack" class="mqBack" onclick="mqClosePage()">← Rental</button></div>
+    <div class="mqIntro">Pilih satu model dan servis. Tandakan beberapa promo atau tempoh kontrak untuk satu quotation WhatsApp.</div>
+    <div class="mqFields">
+      <div class="mqField" id="mqCatWrap"><label for="mqCat">Kategori Produk</label><select id="mqCat"></select></div>
+      <div class="mqField" id="mqModelWrap"><label for="mqModel">Model</label><select id="mqModel"></select></div>
+      <div class="mqField" id="mqVariantWrap"><label for="mqVariant">Jenis / Saiz</label><select id="mqVariant"></select></div>
+      <div class="mqField" id="mqCareWrap"><label for="mqCare">Care Service</label><select id="mqCare"></select></div>
+      <div class="mqField" id="mqFreqWrap"><label for="mqFreq">Kekerapan Servis</label><select id="mqFreq"></select></div>
+      <div class="mqField" id="mqApplicationWrap"><label for="mqApplication">Jenis Pembelian</label><select id="mqApplication"></select></div>
+      <div class="mqField" id="mqRegionWrap"><label for="mqRegion">Region</label><select id="mqRegion"></select></div>
+    </div>
+  </div>
+  <div id="mqPlans" aria-live="polite"></div>
+  <div id="mqOutput" aria-live="polite"></div>
+</section>
+
 <section id="savingsPage" class="hidden">
   <div class="hero"><div class="h1">💰 JIMAT — Nilai Istimewa Trade In</div>
     <div class="desc">Bandingkan FIESTA atau WOW 5 / WOW 7 dengan TRADE X-5 / TRADE X-7. Termasuk produk Homecare apabila pasangan harga tersedia bagi model dan servis yang sama.</div>
@@ -1141,6 +1212,7 @@ select:disabled{background:#eef3f5;color:#9aa7ae}
   <button class="navbtn" id="svmNav">🛠️ SVM</button>
   <button class="navbtn" id="mmNav">🧩 M&M</button>
   <button class="navbtn" id="savingsNav">💰 JIMAT</button>
+  <button class="navbtn" id="multiQuoteNav" type="button" title="Quotation Pelbagai Pelan" aria-label="Quotation Pelbagai Pelan">📋 MULTI QUOTE</button>
 </div></div>
 
 
@@ -1635,6 +1707,60 @@ function pcComparison(base){
   return {normal,mm,promoSource,promoValue,promoMonths,promoInfo,note,isRM10,isTopUp,isCorporate,isRegular};
 }
 
+// Compact Rental quotation. Reuses the same official price comparison and tax logic
+// as the full quotation; never constructs missing prices or guesses service intervals.
+function pcCustomerRentalShortQuote(base,cmp,normalBefore,normalAfter,mmBefore,mmAfter,promoBefore,promoAfter){
+  const cash=n=>n===null||n===undefined?"":
+    "RM"+Number(n).toLocaleString("en-MY",{minimumFractionDigits:Number(n)%1?2:0,maximumFractionDigits:2});
+  const normal=cash(normalAfter),mm=cash(mmAfter),promo=cash(promoAfter);
+  const badge=mqQuoteIcon(base.category);
+  const title=mqQuoteModel(base).toUpperCase();
+  const heading=mqQuoteHeading({row:base,ob:base.obligation});
+  const lines=[`${badge} *${title}*`];
+  if(isMattressCat(base.category)){
+    const type=mattressTypeLabel(base),size=mattressSizeLabel(base);
+    if(type)lines.push(`🛏️ ${type}${size?" · "+size:""}`);
+  }
+  lines.push("━━━━━━━━━━━━━━","",`💙 *${heading}*`);
+  const care=mqQuoteCare(base);
+  if(care)lines.push(care);
+  const isAnniversary=promoBefore!==null&&promoBefore!==undefined&&
+    Number(cmp.promoMonths)>0&&!cmp.isRM10&&!cmp.isTopUp&&!cmp.isCorporate;
+  if(isAnniversary){
+    lines.push(`🎁 *PROMO: ${promo} × ${Number(cmp.promoMonths)} BULAN*`);
+    if(normal||mm)lines.push(`💳 Selepas Promo: *${normal||mm}/bulan*`);
+    const rates=[normal?`💰 Normal: *${normal}*`:"",mm?`💚 M&M: *${mm}*`:""].filter(Boolean).join(" | ");
+    if(rates)lines.push(rates);
+  }else if(cmp.isRM10){
+    lines.push("🎁 *REBATE RM10 × 60 BULAN*");
+    if(promo)lines.push(`💳 Harga selepas rebat: *${promo}/bulan*`);
+    if(normal&&normal!==promo)lines.push(`💰 Harga asal: *${normal}/bulan*`);
+    if(mm)lines.push(`💚 M&M (jika layak): *${mm}/bulan*`);
+  }else if(cmp.isTopUp||cmp.isCorporate){
+    const special=promo||cash(addSST(base.monthly,base));
+    if(special)lines.push(`💳 Harga khas: *${special}/bulan*`);
+  }else{
+    const amount=promo||normal||mm;
+    if(amount)lines.push(`💳 Sewaan: *${amount}/bulan*`);
+    if(mm&&normal)lines.push(`💰 Normal: *${normal}* | 💚 M&M: *${mm}*`);
+    else if(mm&&amount!==mm)lines.push(`💚 M&M: *${mm}/bulan*`);
+  }
+  if((normalBefore!==null&&normalBefore!==undefined&&Number(normalAfter)!==Number(normalBefore))||
+    (mmBefore!==null&&mmBefore!==undefined&&Number(mmAfter)!==Number(mmBefore))||
+    (promoBefore!==null&&promoBefore!==undefined&&Number(promoAfter)!==Number(promoBefore))){
+    lines.push("🧾 Harga termasuk SST 6% jika berkenaan");
+  }
+  return lines.filter((v,i,a)=>v!==""||a[i-1]!=="").join("\n").trim();
+}
+
+// Two one-tap WhatsApp actions for each Rental card; full message stays unchanged.
+function pcRentalQuoteButtons(shortText,fullText){
+  return `<div class="rentalQuoteActions" role="group" aria-label="Pilih format quotation Rental">
+    <button type="button" class="copyQuoteBtn rentalCopyShort" data-q="${encodeURIComponent(shortText)}" onclick="copyQuote(this)">✨ Copy Ayat Ringkas</button>
+    <button type="button" class="copyQuoteBtn rentalCopyFull" data-q="${encodeURIComponent(fullText)}" onclick="copyQuote(this)">💬 Copy Ayat Penuh</button>
+  </div>`;
+}
+
 // Customer-facing WhatsApp quote. Keep the price checker comparison on-screen,
 // but communicate the payment timeline and conditional prices clearly to customers.
 function pcCustomerRentalQuote(base,cmp,normalBefore,normalAfter,mmBefore,mmAfter,promoBefore,promoAfter){
@@ -1759,7 +1885,10 @@ function dealCard(base){
     </div>
     <div class="compareNote">${safe(cmp.note)}</div>
     ${(!pcIsRegularReference(base) && base.notes && (/STG-26-|quota|corporate|TOP UP|RM10/i.test(base.source+' '+base.notes)))?`<div class="sourceNote">${safe(base.notes)}</div>`:''}
-    ${qbtn(pcCustomerRentalQuote(base,cmp,normalBefore,normalAfter,mmBefore,mmAfter,promoBefore,promoAfter))}
+    ${pcRentalQuoteButtons(
+      pcCustomerRentalShortQuote(base,cmp,normalBefore,normalAfter,mmBefore,mmAfter,promoBefore,promoAfter),
+      pcCustomerRentalQuote(base,cmp,normalBefore,normalAfter,mmBefore,mmAfter,promoBefore,promoAfter)
+    )}
   </article>`;
 }
 
@@ -3142,13 +3271,321 @@ function initSavings(){
 }
 
 
+
+// Multi-plan comparison. Reads the SAME current, published Rental records as the existing checker.
+// Nothing here edits the source prices, the old quotation flow, the M&M calculator or Access ID.
+const mqStages=["Cat","Model","Variant","Care","Freq","Application","Region"];
+const mqSelected=new Set();
+let mqPlans=[];
+const mqNode=id=>document.getElementById(id);
+const mqSafe=s=>String(s??"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+// WhatsApp bold/italic in the in-app preview; copied message keeps its WhatsApp markers.
+function mqPreviewHtml(message){
+  return mqSafe(message).replace(/\*([^*\n]+)\*/g,"<strong>$1</strong>").replace(/_([^_\n]+)_/g,"<em>$1</em>");
+}
+const mqUnique=a=>[...new Set(a.filter(x=>x!==undefined&&x!==null&&String(x)!==""))];
+function mqIsReference(r){
+  return pcIsRegularReference(r) || /Extended Air Conditioner Promotion \(Regular\)|Regular WOW Series/i.test(String(r.offer||""));
+}
+function mqBaseRows(){return rentalRows().filter(r=>!mqIsReference(r));}
+function mqVariant(r){
+  if(isMattressCat(r.category))return [mattressTypeLabel(r),mattressSizeLabel(r)].filter(Boolean).join(" · ")||"Standard";
+  return "__ALL__";
+}
+function mqRegionValues(rows){
+  const regions=mqUnique(rows.map(r=>r.region||""));
+  if(regions.some(v=>/West Malaysia|East Malaysia|WM\s*&\s*EM/i.test(v))){
+    const names=[];
+    if(regions.some(v=>/West Malaysia|WM\s*&\s*EM/i.test(v)))names.push("West Malaysia");
+    if(regions.some(v=>/East Malaysia|WM\s*&\s*EM/i.test(v)))names.push("East Malaysia");
+    return names;
+  }
+  return regions.length?regions:["WM & EM"];
+}
+function mqValue(r,stage){
+  if(stage==="Cat")return r.category;
+  if(stage==="Model")return pcModelKey(r);
+  if(stage==="Variant")return mqVariant(r);
+  if(stage==="Care")return careLabel(r);
+  if(stage==="Freq")return r.service||"__NONE__";
+  if(stage==="Application")return r.application;
+  if(stage==="Region")return r.region||"WM & EM";
+  return "";
+}
+function mqMatch(r,stage,value){
+  if(stage==="Region"){
+    const rg=r.region||"WM & EM";
+    return rg===value || rg==="WM & EM" || (!rg && (value==="West Malaysia"||value==="East Malaysia"));
+  }
+  return mqValue(r,stage)===value;
+}
+function mqOptions(rows,stage){
+  if(stage==="Region")return mqRegionValues(rows);
+  return mqUnique(rows.map(r=>mqValue(r,stage))).sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));
+}
+function mqLabel(stage,v){
+  if(stage==="Model")return pcModelOptionLabel(v);
+  if(stage==="Freq")return v==="__NONE__"?"Tidak dinyatakan":serviceLabel(v);
+  if(stage==="Application")return purchaseLabel(v);
+  if(stage==="Variant")return v==="__ALL__"?"Standard":v;
+  return v;
+}
+function mqFillSelect(el,vals,current,stage){
+  el.replaceChildren(new Option(stage==="Cat"?"Pilih kategori":stage==="Model"?"Pilih model":"Pilih pilihan",""));
+  vals.forEach(v=>el.add(new Option(mqLabel(stage,v),v)));
+  el.value=vals.includes(current)?current:"";
+}
+function mqResetAfter(stage){
+  const pos=mqStages.indexOf(stage);
+  mqStages.slice(pos+1).forEach(name=>mqNode("mq"+name).value="");
+  mqSelected.clear();
+  mqRefresh();
+}
+function mqRefresh(){
+  let rows=mqBaseRows(),canAdvance=true;
+  for(const stage of mqStages){
+    const el=mqNode("mq"+stage),wrap=mqNode("mq"+stage+"Wrap");
+    if(!canAdvance){wrap.style.display="none";mqFillSelect(el,[],"",stage);continue;}
+    const vals=mqOptions(rows,stage);
+    let current=el.value;
+    if(!vals.includes(current))current="";
+    if(!current && stage==="Region" && vals.includes("West Malaysia"))current="West Malaysia";
+    if(!current && vals.length===1 && stage!=="Cat" && stage!=="Model")current=vals[0];
+    mqFillSelect(el,vals,current,stage);
+    // Hide non-informative fields, while retaining their values in the filter.
+    const hide=(stage==="Variant"&&vals.length===1&&vals[0]==="__ALL__") ||
+      (stage==="Freq"&&vals.length===1&&vals[0]==="__NONE__") ||
+      ((stage==="Care"||stage==="Variant"||stage==="Freq"||stage==="Application"||stage==="Region")&&vals.length===1);
+    wrap.style.display=hide?"none":"";
+    if(!current){canAdvance=false;continue;}
+    rows=rows.filter(r=>mqMatch(r,stage,current));
+  }
+  mqPlans=canAdvance?mqBuildPlans(rows):[];
+  const valid=new Set(mqPlans.map(p=>p.id));
+  for(const id of [...mqSelected])if(!valid.has(id))mqSelected.delete(id);
+  mqRender();
+}
+function mqPlanLabel(r){
+  const promo=promoLabel(r),raw=String(r.promotion||"").trim();
+  return /JOM TUKAR/i.test(promo) && !promo.toUpperCase().includes(raw.toUpperCase()) && raw ? promo+" · "+raw : promo;
+}
+function mqBuildPlans(rows){
+  const groups=new Map();
+  for(const r of rows){
+    const label=mqPlanLabel(r);
+    const k=label+"§"+r.obligation;
+    if(!groups.has(k))groups.set(k,[]);
+    groups.get(k).push(r);
+  }
+  const plans=[];
+  for(const [id,g] of groups){
+    const sorted=g.slice().sort((a,b)=>{
+      const A=a.region===mqNode("mqRegion").value?0:1,B=b.region===mqNode("mqRegion").value?0:1;
+      return A-B;
+    });
+    const isMm=r=>/mix\s*&\s*match/i.test(r.offer||"");
+    const regular=sorted.find(r=>!isMm(r))||null;
+    const mix=sorted.find(isMm)||null;
+    const row=regular||mix;
+    if(!row)continue;
+    const promo=regular?.promoPrice??mix?.promoPrice??null;
+    const months=regular?.promoMonths??mix?.promoMonths??0;
+    plans.push({id,label:mqPlanLabel(row),ob:row.obligation,regular,mix,row,promo,months});
+  }
+  const prio=r=>{
+    const p=String(r.row.promotion||"").toUpperCase();
+    if(p.startsWith("FIESTA"))return 0;
+    if(p.startsWith("WOW 5"))return 1;
+    if(p.startsWith("WOW 7"))return 2;
+    if(p.startsWith("EXTRADE"))return 3;
+    if(p.startsWith("TRADE X-5"))return 4;
+    if(p.startsWith("TRADE X-7"))return 5;
+    return 6;
+  };
+  return plans.sort((a,b)=>prio(a)-prio(b)||Number(/JOM TUKAR/i.test(a.label))-Number(/JOM TUKAR/i.test(b.label))||a.label.localeCompare(b.label)||a.ob.localeCompare(b.ob));
+}
+function mqMoney(n,row){
+  if(n===null||n===undefined||n==="")return "—";
+  const value=addSST(n,row);
+  return "RM"+Number(value).toLocaleString("en-MY",{minimumFractionDigits:Number(value)%1?2:0,maximumFractionDigits:2});
+}
+function mqTerm(ob){return smmObligationLabel(ob);}
+function mqPromoSummary(p){
+  if(p.promo===null||p.promo===undefined||!Number(p.months))return "Tiada rebat sementara dinyatakan";
+  if(/RM10 REBATE 60 MONTHS/i.test(p.row.promotion||""))return "Rebat RM10 sepanjang 60 bulan";
+  return mqMoney(p.promo,p.regular||p.mix||p.row)+"/bulan untuk "+p.months+" bulan pertama";
+}
+function mqEligibility(r){
+  const s=String(r.customer||"");
+  if(/malaysian\)\s*only|malaysian only/i.test(s))return "Individu Malaysia sahaja";
+  if(/malaysian\s*\/\s*foreigner/i.test(s))return "Individu Malaysia / warga asing";
+  return s||"Tertakluk kepada kelayakan";
+}
+function mqQuoteIcon(category){
+  return ({"Air Conditioner":"❄️","Water Purifier":"💧","Air Purifier":"🌬️","Outdoor Filter":"🚰","BEREX Mattress":"🛏️","Laundry Care":"🧺","Refrigerator":"🧊","BEREX Massage":"💆","Bidet":"🚽"})[category]||"🏡";
+}
+function mqQuoteModel(r){
+  const name=pcDisplayModel(r);
+  // The model code remains available in the product selector, but the WhatsApp heading stays concise.
+  return r.category==="Air Conditioner" ? name.replace(/\s*\([A-Z0-9-]+\)\s*$/i,"") : name;
+}
+function mqQuoteHeading(p){
+  const raw=String(p.row.promotion||"").trim();
+  const offer=String(p.row.offer||"").toUpperCase();
+  const years=(String(p.ob||"").match(/^(\d+)\+(\d+)$/)||[]);
+  const term=years.length===3 ? (Number(years[1])+Number(years[2]))+" TAHUN" : mqTerm(p.ob).toUpperCase();
+  let promo=raw;
+  if(offer.includes("JOM TUKAR / JOM TAMBAH AC"))promo="JOM TUKAR / TAMBAH AC · "+raw;
+  else if(offer.includes("JOM TUKAR WP"))promo="JOM TUKAR WP · "+raw;
+  else if(/CORPORATE JOM TUKAR WP/i.test(offer))promo="JOM TUKAR WP CORPORATE · "+raw;
+  else if(/^JOM TUKAR CORPORATE$/i.test(raw))promo="JOM TUKAR WP CORPORATE";
+  else if(/^TOP UP/i.test(raw))promo=raw;
+  else if(/^FIESTA(?: \(3\+2\))?$/i.test(raw))promo="FIESTA";
+  else if(/^EXTRADE(?: \(3\+2\))?$/i.test(raw))promo="EXTRADE";
+  return `${promo.toUpperCase()} | ${term}`;
+}
+function mqQuoteCare(r){
+  const care=careLabel(r),service=String(r.service||"").toUpperCase();
+  if(care==="Self-Service"||service==="SS")return "🔧 *Self-Service* · Tiada Heart Service berkala";
+  if(care==="Without Care Service")return "🔧 *Without Care Service* · Tiada Care Service berkala";
+  if(care==="With Care Service"){
+    // A blank source frequency must never silently become 6M / another invented interval.
+    const frequency=/^\d+M$/.test(service)?" · "+serviceLabel(service):"";
+    return "🔧 *With Care Service*"+frequency;
+  }
+  return care?"🔧 *"+care+"*":"";
+}
+function mqQuotePromo(p){
+  const months=Number(p.months)||0;
+  const has=months>0&&p.promo!==null&&p.promo!==undefined;
+  const isRebate60=/RM10 REBATE 60 MONTHS/i.test(String(p.row.promotion||""));
+  return {months,has,isRebate60,price:has?mqMoney(p.promo,p.regular||p.mix||p.row):""};
+}
+function mqMakeShortQuote(plans){
+  if(!plans.length)return "";
+  const first=plans[0].row,lines=[`${mqQuoteIcon(first.category)} *${mqQuoteModel(first).toUpperCase()}*`];
+  if(isMattressCat(first.category))lines.push(`🛏️ *${mqVariant(first)}*`);
+  lines.push("━━━━━━━━━━━━━━");
+  const badges=["💙","💜","🩵","💛","💚","🧡"];
+  plans.forEach((p,i)=>{
+    const ref=p.regular||p.mix||p.row;
+    const promo=mqQuotePromo(p);
+    const normal=p.regular?mqMoney(p.regular.monthly,p.regular):"";
+    const mm=p.mix?mqMoney(p.mix.monthly,p.mix):"";
+    if(i)lines.push("","━━━━━━━━━━━━━━");
+    lines.push("",`${badges[i%badges.length]} *${mqQuoteHeading(p)}*`,mqQuoteCare(ref));
+    if(promo.has)lines.push(`🎁 *PROMO: ${promo.price} × ${promo.months} BULAN*`);
+    else if(promo.isRebate60)lines.push("🎁 *REBATE RM10 × 60 BULAN*");
+    const after=normal||mm;
+    if(after)lines.push(`💳 ${promo.has?"Selepas Promo":"Sewaan"}: *${after}/bulan*`);
+    const rate=[normal?`💰 Normal: *${normal}*`:"",mm?`💚 M&M: *${mm}*`:""].filter(Boolean).join(" | ");
+    if(rate)lines.push(rate);
+  });
+  return lines.join("\n").replace(/\n{3,}/g,"\n\n").trim();
+}
+function mqMakeFullQuote(plans){
+  if(!plans.length)return "";
+  const first=plans[0].row;
+  const icon=mqQuoteIcon(first.category);
+  const lines=[`${icon} *SEBUT HARGA COWAY*`,`*${mqQuoteModel(first).toUpperCase()}*`];
+  if(isMattressCat(first.category))lines.push(`🛏️ ${mqVariant(first)}`);
+  lines.push("","✨ Pilihan pelan Coway untuk perbandingan:","");
+  const eligible=plans.map(p=>mqEligibility(p.regular||p.mix||p.row));
+  const commonEligibility=eligible.every(v=>v===eligible[0]);
+  const expiry=plans.map(p=>String(p.row.end||""));
+  const commonExpiry=expiry.every(v=>v===expiry[0]);
+  const cares=plans.map(p=>mqQuoteCare(p.regular||p.mix||p.row));
+  const commonCare=cares.every(v=>v===cares[0]);
+  const badges=["💙","💜","🩵","💛","💚","🧡"];
+  plans.forEach((p,i)=>{
+    const promo=mqQuotePromo(p);
+    const normal=p.regular?mqMoney(p.regular.monthly,p.regular):"";
+    const mm=p.mix?mqMoney(p.mix.monthly,p.mix):"";
+    if(i)lines.push("","━━━━━━━━━━━━━━","");
+    lines.push(`${badges[i%badges.length]} *${mqQuoteHeading(p)}*`);
+    if(!commonCare&&cares[i])lines.push(cares[i]);
+    if(promo.has)lines.push(`🎁 *${promo.price}/bulan untuk ${promo.months} bulan pertama*`);
+    else if(promo.isRebate60)lines.push("🎁 *Rebat RM10 sepanjang 60 bulan*");
+    if(normal)lines.push(`💳 ${promo.has?"Selepas promo":"Sewaan"}: *${normal}/bulan*`);
+    if(mm)lines.push(`💚 ${normal?"Dengan M&M (jika layak)":"Harga M&M (jika layak)"}: *${mm}/bulan*`);
+    if(!commonEligibility&&eligible[i])lines.push(`👤 Kelayakan: ${eligible[i]}`);
+    if(!commonExpiry&&expiry[i])lines.push(`📅 Sah sehingga: ${expiry[i]}`);
+  });
+  lines.push("","━━━━━━━━━━━━━━","");
+  if(commonCare&&cares[0])lines.push(cares[0]);
+  const region=mqNode("mqRegion").value;
+  if(region)lines.push(`📍 ${region==="West Malaysia"?"Semenanjung Malaysia":region==="East Malaysia"?"Malaysia Timur":region}`);
+  if(commonEligibility&&eligible[0])lines.push(`👤 Kelayakan: ${eligible[0]}`);
+  if(commonExpiry&&expiry[0])lines.push(`📅 Promosi sehingga: ${expiry[0]}`);
+  if(plans.some(p=>p.mix))lines.push("🎁 *M&M:* Pembelian sekurang-kurangnya 2 unit dalam bulan yang sama, tertakluk kepada kelayakan.");
+  if(plans.some(p=>/JOM TUKAR|JOM TAMBAH/i.test(p.label)))lines.push("🔄 Jom Tukar / Jom Tambah tertakluk kepada kelayakan produk sedia ada.");
+  if(plans.some(p=>/^TOP UP/i.test(p.row.promotion||"")))lines.push("🚰 TOP UP POE tertakluk kepada syarat produk Coway sedia ada yang layak.");
+  lines.push("", "📲 *Nak pilih pelan yang mana?* 😊", "Saya boleh bantu semak kelayakan dan uruskan tempahan.","", "_Harga tertakluk kepada kelayakan, SST jika berkenaan dan pengesahan Coway._");
+  return lines.filter((s,i,a)=>s!==""||a[i-1]!=="").join("\n").trim();
+}
+let mqQuoteMode="ringkas";
+function mqSetQuoteMode(mode){
+  if(mode!=="ringkas"&&mode!=="penuh")return;
+  mqQuoteMode=mode;
+  mqRender();
+}
+function mqMakeQuote(plans){
+  return mqQuoteMode==="penuh"?mqMakeFullQuote(plans):mqMakeShortQuote(plans);
+}
+function mqPick(id,checked){if(checked)mqSelected.add(id);else mqSelected.delete(id);mqRender();}
+function mqPickAll(checked){mqSelected.clear();if(checked)mqPlans.forEach(p=>mqSelected.add(p.id));mqRender();}
+function mqRender(){
+  const panel=mqNode("mqPlans"),out=mqNode("mqOutput");
+  if(!mqPlans.length){panel.innerHTML='<div class="empty">Pilih kategori dan model untuk lihat promo serta obligation yang tersedia.</div>';out.innerHTML="";return;}
+  const selected=mqPlans.filter(p=>mqSelected.has(p.id));
+  panel.innerHTML=`<div class="mqSelectionHeader"><b>Pilih pelan (${selected.length}/${mqPlans.length})</b><div class="mqTools"><button type="button" onclick="mqPickAll(true)">Pilih Semua</button><button type="button" onclick="mqPickAll(false)">Kosongkan</button></div></div>`+
+    mqPlans.map(p=>{
+      const price=p.regular?mqMoney(p.regular.monthly,p.regular):"—",mm=p.mix?mqMoney(p.mix.monthly,p.mix):"—";
+      return `<label class="mqPlanCard"><span class="mqCardTop"><input type="checkbox" ${mqSelected.has(p.id)?"checked":""} onchange="mqPick(decodeURIComponent(this.value),this.checked)" value="${encodeURIComponent(p.id)}"><span><span class="mqPlanTitle">${mqSafe(p.label)}</span><div class="mqPlanDesc">Obligation ${mqSafe(mqTerm(p.ob))} · ${mqSafe(mqPromoSummary(p))}</div></span></span><span class="mqRates">${p.regular?`<span>Harga asal <b>${mqSafe(price)}</b></span>`:""}${p.mix?`<span>Mix & Match <b>${mqSafe(mm)}</b></span>`:""}</span></label>`;
+    }).join("");
+  if(selected.length<2){out.innerHTML='<div class="mqIntro">Tandakan sekurang-kurangnya 2 pelan untuk hasilkan satu quotation perbandingan.</div>';return;}
+  const q=mqMakeQuote(selected);
+  out.innerHTML=`<div class="mqResult"><div class="mqResultTitle">✅ Quotation ${selected.length} Pilihan</div>
+    <div class="mqQuoteModeLabel">Pilih format ayat WhatsApp</div>
+    <div class="mqQuoteMode" role="group" aria-label="Format ayat quotation">
+      <button type="button" class="${mqQuoteMode==="ringkas"?"active":""}" aria-pressed="${mqQuoteMode==="ringkas"}" onclick="mqSetQuoteMode('ringkas')">✨ Ayat Ringkas</button>
+      <button type="button" class="${mqQuoteMode==="penuh"?"active":""}" aria-pressed="${mqQuoteMode==="penuh"}" onclick="mqSetQuoteMode('penuh')">💬 Ayat Penuh</button>
+    </div>
+    <div class="mqQuotePreview">${mqPreviewHtml(q)}</div>${qbtn(q)}</div>`;
+}
+function mqInit(){
+  for(const stage of mqStages){
+    mqNode("mq"+stage).addEventListener("change",()=>mqResetAfter(stage));
+  }
+  mqRefresh();
+}
+function mqOpenPage(){
+  // Bring the current Rental choice across where possible; never modify the Rental screen itself.
+  if(!mqNode("mqCat").value && cat.value){
+    mqNode("mqCat").value=cat.value;mqRefresh();
+    if(prod.value){
+      mqNode("mqModel").value=prod.value;mqRefresh();
+      if(isMattressCat(cat.value) && mattressType.value && mattressSize.value){
+        mqNode("mqVariant").value=mattressType.value+" · "+mattressSize.value;mqRefresh();
+      }
+      if(care.value){mqNode("mqCare").value=care.value;mqRefresh();}
+      if(service.value){mqNode("mqFreq").value=service.value;mqRefresh();}
+      if(app.value){mqNode("mqApplication").value=app.value;mqRefresh();}
+    }
+  }
+  showPage("multi");syncTop("multi");mqRefresh();
+}
+function mqClosePage(){showPage("price");syncTop("price");}
+
 function showPage(which){
   $("pricePage").classList.toggle("hidden",which!=="price");
   $("outrightPage").classList.toggle("hidden",which!=="out");
   $("svmPage").classList.toggle("hidden",which!=="svm");
   $("mmPage").classList.toggle("hidden",which!=="mm");
   $("savingsPage").classList.toggle("hidden",which!=="savings");
+  $("multiQuotePage").classList.toggle("hidden",which!=="multi");
   $("priceNav").classList.toggle("active",which==="price");
+  $("multiQuoteNav").classList.toggle("active",which==="multi");
   $("outrightNav").classList.toggle("active",which==="out");
   $("svmNav").classList.toggle("active",which==="svm");
   $("mmNav").classList.toggle("active",which==="mm");
@@ -3172,7 +3609,8 @@ $("outrightNav").onclick=()=>{showPage("out");syncTop("out")};
 $("svmNav").onclick=()=>{showPage("svm");syncTop("svm")};
 $("mmNav").onclick=()=>{showPage("mm");syncTop("mm")};
 $("savingsNav").onclick=()=>{showPage("savings");syncTop("savings")};
-renderRental();renderOut();renderSvm();initMM();initSavings();
+$("multiQuoteNav").onclick=()=>mqOpenPage();
+renderRental();renderOut();renderSvm();initMM();initSavings();mqInit();
 </script>
 <div id="copyToast" class="copyToast">Quotation copied ✅</div>
 
